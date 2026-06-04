@@ -11,5 +11,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleNumberFormat() {
         return ResponseEntity.badRequest().build();
     }
+
+    @ExceptionHandler(MailAlreadyExistsException.class)
+    public ResponseEntity<?> handle() {
+        return ResponseEntity.badRequest().build();
+    }
     
 }
