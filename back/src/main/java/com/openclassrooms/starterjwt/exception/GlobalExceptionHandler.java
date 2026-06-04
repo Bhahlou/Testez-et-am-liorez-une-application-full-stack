@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.openclassrooms.starterjwt.payload.response.MessageResponse;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -13,8 +15,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MailAlreadyExistsException.class)
-    public ResponseEntity<?> handle() {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> handleMailAlreadyExists(MailAlreadyExistsException ex) {
+        return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
     }
-    
+
 }
