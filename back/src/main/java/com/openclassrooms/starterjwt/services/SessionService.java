@@ -7,6 +7,7 @@ import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.repository.SessionRepository;
 import com.openclassrooms.starterjwt.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,9 +39,16 @@ public class SessionService {
         return this.sessionRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public Session update(Long id, Session session) {
-        session.setId(id);
-        return this.sessionRepository.save(session);
+        Session existingSession = this.sessionRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        existingSession.setName(session.getName());
+        existingSession.setDate(session.getDate());
+        existingSession.setDescription(session.getDescription());
+        existingSession.setTeacher(session.getTeacher());
+        existingSession.setUsers(session.getUsers());
+        return this.sessionRepository.save(existingSession);
     }
 
     public void participate(Long id, Long userId) {
