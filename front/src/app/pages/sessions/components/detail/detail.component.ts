@@ -95,9 +95,6 @@ export class DetailComponent implements OnInit {
           this.isParticipate = session.users.some(
             (u) => u === this.sessionService.sessionInformation!.id,
           );
-          this.teacherService
-            .detail(session.teacher_id.toString())
-            .subscribe((teacher: Teacher) => (this.teacher = teacher));
         }),
         switchMap((session: Session) =>
           this.teacherService.detail(session.teacher_id.toString()),
