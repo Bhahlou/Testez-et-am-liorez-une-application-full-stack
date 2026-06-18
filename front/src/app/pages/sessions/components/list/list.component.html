@@ -3,7 +3,12 @@
     <mat-card-header fxLayout="row" fxLayoutAlign="space-between center">
       <mat-card-title class="m0">Rentals available</mat-card-title>
       @if (user?.admin) {
-        <button mat-raised-button color="primary" routerLink="create">
+        <button
+          data-cy="create-button"
+          mat-raised-button
+          color="primary"
+          routerLink="create"
+        >
           <mat-icon>add</mat-icon>
           <span class="ml1">Create</span>
         </button>
@@ -16,7 +21,7 @@
             <mat-card-title data-testid="session-title">{{
               session.name
             }}</mat-card-title>
-            <mat-card-subtitle>
+            <mat-card-subtitle data-testid="session-date">
               Session on {{ session.date | date: "longDate" }}
             </mat-card-subtitle>
           </mat-card-header>

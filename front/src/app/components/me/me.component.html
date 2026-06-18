@@ -20,7 +20,12 @@
           } @else {
             <div fxLayout="column" class="my2" fxLayoutAlign="center center">
               <p>Delete my account:</p>
-              <button mat-raised-button color="warn" (click)="delete()">
+              <button
+                datatest-id="delete-button"
+                mat-raised-button
+                color="warn"
+                (click)="delete()"
+              >
                 <mat-icon>delete</mat-icon>
                 <span class="ml1">Detail</span>
               </button>

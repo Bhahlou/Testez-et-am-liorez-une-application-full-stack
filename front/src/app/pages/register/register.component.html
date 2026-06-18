@@ -7,22 +7,39 @@
       <mat-card-content fxLayout="column">
         <mat-form-field fxFlex>
           <input
+            data-cy="firstName-input"
             matInput
             placeholder="First name"
             formControlName="firstName"
           />
         </mat-form-field>
         <mat-form-field fxFlex>
-          <input matInput placeholder="Last name" formControlName="lastName" />
+          <input
+            data-cy="lastName-input"
+            matInput
+            placeholder="Last name"
+            formControlName="lastName"
+          />
         </mat-form-field>
         <mat-form-field fxFlex>
-          <input matInput placeholder="Email" formControlName="email" />
+          <input
+            data-cy="email-input"
+            matInput
+            placeholder="Email"
+            formControlName="email"
+          />
         </mat-form-field>
         <mat-form-field fxFlex>
-          <input matInput placeholder="Password" formControlName="password" />
+          <input
+            data-cy="password-input"
+            matInput
+            placeholder="Password"
+            formControlName="password"
+          />
         </mat-form-field>
       </mat-card-content>
       <button
+        data-cy="submit-button"
         mat-raised-button
         color="primary"
         type="submit"

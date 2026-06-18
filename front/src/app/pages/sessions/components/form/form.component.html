@@ -22,15 +22,24 @@
         >
           <mat-form-field appearance="outline" class="" fxFlex>
             <mat-label>Name</mat-label>
-            <input matInput formControlName="name" />
+            <input matInput formControlName="name" data-cy="name-input" />
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex>
             <mat-label>Date</mat-label>
-            <input matInput type="date" formControlName="date" />
+            <input
+              matInput
+              type="date"
+              formControlName="date"
+              data-cy="date-input"
+            />
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Teacher</mat-label>
-            <mat-select ngDefaultControl formControlName="teacher_id">
+            <mat-select
+              ngDefaultControl
+              formControlName="teacher_id"
+              data-cy="teacher-input"
+            >
               @for (teacher of teachers$ | async; track $index) {
                 <mat-option [value]="teacher.id">
                   {{ teacher.firstName }} {{ teacher.lastName }}
@@ -41,6 +50,7 @@
           <mat-form-field appearance="outline" fxFlex>
             <mat-label>Description</mat-label>
             <textarea
+              data-cy="desc-input"
               matInput
               rows="8"
               formControlName="description"
@@ -48,6 +58,7 @@
           </mat-form-field>
           <div fxLayout="row" fxLayoutAlign="center center">
             <button
+              data-cy="save-button"
               mat-raised-button
               datatest-id="submit-button"
               color="primary"

@@ -12,6 +12,7 @@
           <div>
             @if (isAdmin) {
               <button
+                data-cy="delete-button"
                 mat-raised-button
                 color="warn"
                 data-testid="delete-button"
@@ -23,6 +24,7 @@
             } @else {
               @if (isParticipate) {
                 <button
+                  data-cy="unparticipate-button"
                   mat-raised-button
                   color="warn"
                   (click)="unParticipate()"
@@ -32,6 +34,7 @@
                 </button>
               } @else {
                 <button
+                  data-cy="participate-button"
                   mat-raised-button
                   color="primary"
                   (click)="participate()"
