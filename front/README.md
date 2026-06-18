@@ -20,29 +20,27 @@ Launch Front-end:
 
 > npm run start;
 
-
 ### Test
 
 #### E2E
 
-Launching e2e test:
+- Launch back with e2e db (db will reset seed data everytime it starts):
+  `mvn spring-boot:run "-Dspring-boot.run.profiles=e2e"`
+- Launch all e2e tests:
+  `npm run e2e:ci`
+- Generate coverage report (you should launch e2e test before):
+  `npm run e2e:coverage`
+- Stop the back. If you don't stop the back before launching tests again, tests will fail because db has not been reset.
 
-> npm run e2e
-
-Generate coverage report (you should launch e2e test before):
-
-> npm run e2e:coverage
-
-Report is available here:
-
-> front/coverage/lcov-report/index.html
+Coverage report is available here:
+[front/coverage/lcov-report/index.html](coverage/lcov-report/index.html)
 
 #### Unitary test
 
-Launching test:
+- Launch tests:
+  `npm run test`
+- for following change:
+  `npm run test:watch`
 
-> npm run test
-
-for following change:
-
-> npm run test:watch
+Coverage report is available here:
+[front/coverage/jest/lcov-report/index.html](coverage/jest/lcov-report/index.html)
