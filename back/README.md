@@ -2,7 +2,6 @@
 
 Backend de l'application Yoga App !.
 
-
 ## Configuration du back
 
     - name: back
@@ -16,17 +15,23 @@ Backend de l'application Yoga App !.
     -> Maven 3.9.3 (https://archive.apache.org/dist/maven/maven-3/3.9.3/binaries/) ou plus
 
 ## Démarrage du back
+
 Pour démarrer le back, il :
+
 - démarrer Docker-Desktop sur votre poste de travail local.
 - lancer une console, se placer à la racine du projet et exécuter la commande Maven :
+
 ```
 mvn spring-boot:run
 ```
+
 Cette commande va :
+
 - initialiser le container Docker qui contient la base de données
 - lancer l'application back et le connecter à la base de données précédemment créée
 
 Les traces logs devraient ressemblées à ceci :
+
 ```
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -80,39 +85,39 @@ Sur Docker-Desktop, vous devriez voir apparaître un container MySQL qui corresp
 
 ![1-docker-desktop](pictures/1-docker-desktop.png)
 
-Vous pouvez vous connecter à la base de données et vérifier que la table ```USERS``` a été créée.
+Vous pouvez vous connecter à la base de données et vérifier que la table `USERS` a été créée.
 Pour cela, cliquez sur le lien `back_mysql` ce qui vous amènera sur la vue complète de la base de données.
-Dans l'onglet ```Exec```, il faut :
+Dans l'onglet `Exec`, il faut :
 
 1. se connecter à la base de données. Tapez la commande ci-dessous
 
-    ```
-    mysql -u user_test -p
-    ```
-   L'invite de commande demandera le mot de passe. Il est : ```test_password```.
+   ```
+   mysql -u user_test -p
+   ```
 
+   L'invite de commande demandera le mot de passe. Il est : `test_password`.
 
 2. Se connecter au schéma de base de données `test`. Dans l'invite de commande, tapez la commande ci-dessous :
 
-    ```
-    use test;
-    ```
+   ```
+   use test;
+   ```
 
 3. Copier le contenu du fichier `ressources/sql/insert_user.sql` et l'exécuter dans l'invite de commande :
 
-    ```
-    INSERT INTO users(first_name, last_name, admin, email, password) VALUES ('Admin', 'Admin', true, 'yoga@studio.com', '$2a$10$.Hsa/ZjUVaHqi0tp9xieMeewrnZxrZ5pQRzddUXE/WjDu2ZThe6Iq');
-    ```
-   
-3. Vérifier le contenu de la table `users`.
+   ```
+   INSERT INTO users(first_name, last_name, admin, email, password) VALUES ('Admin', 'Admin', true, 'yoga@studio.com', '$2a$10$.Hsa/ZjUVaHqi0tp9xieMeewrnZxrZ5pQRzddUXE/WjDu2ZThe6Iq');
+   ```
 
-    ```
-    select * from users;
-    ```
+4. Vérifier le contenu de la table `users`.
+
+   ```
+   select * from users;
+   ```
+
    Le résultat devrait afficher les données de l'utilisateur inséré précédemment.
-   
-   Ce script crée l'utilisateur admin par défaut :
 
+   Ce script crée l'utilisateur admin par défaut :
    - login: yoga@studio.com
    - password: test!1234
 
@@ -120,9 +125,7 @@ La capture d'écran ci-dessous résume les étapes précédentes :
 
 ![2-docker-desktop-bdd](pictures/2-docker-desktop-bdd.png)
 
-
 ## Ressources
-
 
 ### Collection Postman
 
@@ -133,3 +136,12 @@ Importez la collection Postman
 La documentation de Postman se trouve ici :
 
 https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman
+
+## Tests
+
+- Ensure Docker Desktop is running for running test DB
+- Launch all tests + coverage check
+  `mvn verify`
+
+Coverage report is available here:
+[back/target/site/jacoco/index.html](target/site/jacoco/index.html)
