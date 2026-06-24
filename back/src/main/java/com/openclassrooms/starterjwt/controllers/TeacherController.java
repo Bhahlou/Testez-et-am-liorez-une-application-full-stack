@@ -1,5 +1,6 @@
 package com.openclassrooms.starterjwt.controllers;
 
+import com.openclassrooms.starterjwt.dto.TeacherDto;
 import com.openclassrooms.starterjwt.mapper.TeacherMapper;
 import com.openclassrooms.starterjwt.models.Teacher;
 import com.openclassrooms.starterjwt.services.TeacherService;
@@ -17,16 +18,15 @@ public class TeacherController {
     private final TeacherMapper teacherMapper;
     private final TeacherService teacherService;
 
-
     public TeacherController(TeacherService teacherService,
-                             TeacherMapper teacherMapper) {
+            TeacherMapper teacherMapper) {
         this.teacherMapper = teacherMapper;
         this.teacherService = teacherService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") String id) {
-       
+    public ResponseEntity<TeacherDto> findById(@PathVariable("id") String id) {
+
         Teacher teacher = this.teacherService.findById(Long.valueOf(id));
 
         if (teacher == null) {
@@ -34,11 +34,11 @@ public class TeacherController {
         }
 
         return ResponseEntity.ok().body(this.teacherMapper.toDto(teacher));
-      
+
     }
 
     @GetMapping()
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<List<TeacherDto>> findAll() {
         List<Teacher> teachers = this.teacherService.findAll();
 
         return ResponseEntity.ok().body(this.teacherMapper.toDto(teachers));

@@ -1,10 +1,5 @@
 package com.openclassrooms.starterjwt.security;
 
-import com.openclassrooms.starterjwt.security.jwt.AuthEntryPointJwt;
-import com.openclassrooms.starterjwt.security.jwt.AuthTokenFilter;
-import com.openclassrooms.starterjwt.security.services.UserDetailsServiceImpl;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,38 +14,45 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.openclassrooms.starterjwt.security.jwt.AuthTokenFilter;
+import com.openclassrooms.starterjwt.security.jwt.JwtUtils;
+import com.openclassrooms.starterjwt.security.services.UserDetailsServiceImpl;
+
+import jakarta.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
+
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+    AuthTokenFilter authenticationJwtTokenFilter(JwtUtils jwtUtils) {
+        return new AuthTokenFilter(jwtUtils, this.userDetailsService);
     }
 
-
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
+    DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter) throws Exception {
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -60,13 +62,11 @@ public class WebSecurityConfig {
                         // No auth needed on :
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                        .anyRequest().authenticated())
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(
-                        (request, response, exception) -> {
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, exception.getMessage());
-                        }));
+                        (request, response, exception) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                                exception.getMessage())));
         return http.build();
     }
 }

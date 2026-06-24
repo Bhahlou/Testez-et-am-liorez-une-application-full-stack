@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.openclassrooms.starterjwt.dto.UserDto;
 import com.openclassrooms.starterjwt.mapper.UserMapper;
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.services.UserService;
@@ -22,16 +23,15 @@ public class UserController {
     private final UserMapper userMapper;
     private final UserService userService;
 
-
     public UserController(UserService userService,
-                          UserMapper userMapper) {
+            UserMapper userMapper) {
         this.userMapper = userMapper;
         this.userService = userService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") String id) {
-      
+    public ResponseEntity<UserDto> findById(@PathVariable("id") String id) {
+
         User user = this.userService.findById(Long.valueOf(id));
 
         if (user == null) {
@@ -39,12 +39,12 @@ public class UserController {
         }
 
         return ResponseEntity.ok().body(this.userMapper.toDto(user));
-      
+
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> save(@PathVariable("id") String id) {
-        
+    public ResponseEntity<Object> save(@PathVariable("id") String id) {
+
         User user = this.userService.findById(Long.valueOf(id));
 
         if (user == null) {
@@ -59,6 +59,6 @@ public class UserController {
 
         this.userService.delete(Long.valueOf(id));
         return ResponseEntity.ok().build();
-       
+
     }
 }

@@ -1,6 +1,5 @@
 package com.openclassrooms.starterjwt.controllers;
 
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -28,15 +27,14 @@ public class SessionController {
     private final SessionMapper sessionMapper;
     private final SessionService sessionService;
 
-
     public SessionController(SessionService sessionService,
-                             SessionMapper sessionMapper) {
+            SessionMapper sessionMapper) {
         this.sessionMapper = sessionMapper;
         this.sessionService = sessionService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") String id) {
+    public ResponseEntity<SessionDto> findById(@PathVariable("id") String id) {
         Session session = this.sessionService.getById(Long.valueOf(id));
 
         if (session == null) {
@@ -47,14 +45,14 @@ public class SessionController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<List<SessionDto>> findAll() {
         List<Session> sessions = this.sessionService.findAll();
 
         return ResponseEntity.ok().body(this.sessionMapper.toDto(sessions));
     }
 
     @PostMapping()
-    public ResponseEntity<?> create(@Valid @RequestBody SessionDto sessionDto) {
+    public ResponseEntity<SessionDto> create(@Valid @RequestBody SessionDto sessionDto) {
         log.info(sessionDto);
 
         Session session = this.sessionService.create(this.sessionMapper.toEntity(sessionDto));
@@ -64,17 +62,17 @@ public class SessionController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable("id") String id, @Valid @RequestBody SessionDto sessionDto) {
+    public ResponseEntity<SessionDto> update(@PathVariable("id") String id, @Valid @RequestBody SessionDto sessionDto) {
 
-            Session session = this.sessionService.update(Long.valueOf(id), this.sessionMapper.toEntity(sessionDto));
+        Session session = this.sessionService.update(Long.valueOf(id), this.sessionMapper.toEntity(sessionDto));
 
-            return ResponseEntity.ok().body(this.sessionMapper.toDto(session));
-      
+        return ResponseEntity.ok().body(this.sessionMapper.toDto(session));
+
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> save(@PathVariable("id") String id) {
-      
+    public ResponseEntity<Object> save(@PathVariable("id") String id) {
+
         Session session = this.sessionService.getById(Long.valueOf(id));
 
         if (session == null) {
@@ -83,24 +81,25 @@ public class SessionController {
 
         this.sessionService.delete(Long.valueOf(id));
         return ResponseEntity.ok().build();
-       
+
     }
 
     @PostMapping("{id}/participate/{userId}")
-    public ResponseEntity<?> participate(@PathVariable("id") String id, @PathVariable("userId") String userId) {
-       
+    public ResponseEntity<Object> participate(@PathVariable("id") String id, @PathVariable("userId") String userId) {
+
         this.sessionService.participate(Long.valueOf(id), Long.valueOf(userId));
 
         return ResponseEntity.ok().build();
-      
+
     }
 
     @DeleteMapping("{id}/participate/{userId}")
-    public ResponseEntity<?> noLongerParticipate(@PathVariable("id") String id, @PathVariable("userId") String userId) {
-       
+    public ResponseEntity<Object> noLongerParticipate(@PathVariable("id") String id,
+            @PathVariable("userId") String userId) {
+
         this.sessionService.noLongerParticipate(Long.valueOf(id), Long.valueOf(userId));
 
         return ResponseEntity.ok().build();
-       
+
     }
 }

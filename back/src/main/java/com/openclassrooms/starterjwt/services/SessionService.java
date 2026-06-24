@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SessionService {
@@ -79,7 +78,11 @@ public class SessionService {
             throw new BadRequestException();
         }
 
-        session.setUsers(session.getUsers().stream().filter(user -> !user.getId().equals(userId)).collect(Collectors.toList()));
+        session.setUsers(
+                session.getUsers()
+                        .stream()
+                        .filter(user -> !user.getId().equals(userId))
+                        .toList());
 
         this.sessionRepository.save(session);
     }

@@ -23,7 +23,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -33,7 +32,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = { "id" })
 @Builder
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -65,15 +64,14 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @NonNull
     private boolean admin;
 
     @CreatedDate
-    @Column(updatable = false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
 }

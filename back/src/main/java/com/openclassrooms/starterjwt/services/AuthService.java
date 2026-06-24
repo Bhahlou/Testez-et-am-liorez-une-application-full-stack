@@ -18,17 +18,17 @@ import com.openclassrooms.starterjwt.security.services.UserDetailsImpl;
 
 @Service
 public class AuthService {
-    
+
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    
+
     public AuthService(
-        AuthenticationManager authenticationManager,
-        JwtUtils jwtUtils,
-        UserRepository userRepository,
-        PasswordEncoder passwordEncoder
+            AuthenticationManager authenticationManager,
+            JwtUtils jwtUtils,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
 
     ) {
         this.authenticationManager = authenticationManager;
@@ -36,8 +36,8 @@ public class AuthService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    
-    public JwtResponse authenticateUser(LoginRequest loginRequest){
+
+    public JwtResponse authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -52,26 +52,27 @@ public class AuthService {
         }
 
         return new JwtResponse(
-            jwt,
-            userDetails.getId(),
-            userDetails.getUsername(),
-            userDetails.getFirstName(),
-            userDetails.getLastName(),
-            isAdmin
-        );
+                jwt,
+                userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getFirstName(),
+                userDetails.getLastName(),
+                isAdmin);
     }
 
-    public void register(SignupRequest signUpRequest){
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+    public void register(SignupRequest signUpRequest) {
+        if (Boolean.TRUE.equals(userRepository.existsByEmail(signUpRequest.getEmail()))) {
             throw new MailAlreadyExistsException();
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getEmail(),
-                signUpRequest.getLastName(),
-                signUpRequest.getFirstName(),
-                passwordEncoder.encode(signUpRequest.getPassword()),
-                false);
+        User user = User.builder()
+                .email(signUpRequest.getEmail())
+                .lastName(signUpRequest.getLastName())
+                .firstName(signUpRequest.getFirstName())
+                .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .admin(false)
+                .build();
 
         userRepository.save(user);
     }

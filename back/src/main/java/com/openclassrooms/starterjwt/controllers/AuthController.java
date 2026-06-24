@@ -1,6 +1,5 @@
 package com.openclassrooms.starterjwt.controllers;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,20 +18,20 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
+
     public AuthController(
-        AuthService authService
-    ) {
+            AuthService authService) {
         this.authService = authService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         JwtResponse response = authService.authenticateUser(loginRequest);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         authService.register(signUpRequest);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
